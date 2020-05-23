@@ -1,0 +1,20 @@
+version: '3.7'
+
+services:
+  user_service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - docker.env
+    volumes:
+      - ./:/opt/app
+      - /opt/app/node_modules
+
+    depends_on:
+      - mongo
+    ports:
+      - 3000:3000
+
+  mongo:
+    image: mongo
