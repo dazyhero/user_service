@@ -3,7 +3,7 @@ import { UserInterface } from '../interfaces/';
 import { fetchUser } from '../utils/fetchUser';
 import { UserServiceInterface } from '../interfaces/userService';
 import { Gender } from '../enums/gender';
-import { HttpBadRequest } from '../errors/httpErrors';
+import { HttpBadRequest, HttpInternalServerError } from '../errors/httpErrors';
 
 export default class UserService implements UserServiceInterface {
   userModel: Model<UserInterface>;
@@ -77,7 +77,7 @@ export default class UserService implements UserServiceInterface {
     password: UserInterface['password']
   ): Promise<void> {
     try {
-      const user = await this.userModel.findOne({ email });
+      const user = await this.userModel.findOne({ email }).select('+password');
       if (!user)
         throw new HttpBadRequest(`User with email ${email} doesn't exist`);
 
